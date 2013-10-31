@@ -8,8 +8,8 @@
 
 //#define ARRAY_NUMBER 10000000
 //#define SORT_NUMBER 1000000
-
-int     randint(int l, int u);
+unsigned bigrand();
+unsigned randint(int l, int u);
 void    swap(int *a,int *b);
 
 int main(int argc,char* argv[])
@@ -19,25 +19,37 @@ int main(int argc,char* argv[])
     FILE *rand_num_file = fopen("rand_num_file.txt","w+");
    
     srand((unsigned)time(NULL));
-    //生不重复的随机数数组：生成一个数组，然后随机打乱
-    for( i=0; i<10000000; i++)
-        num[i] = i;
     
-    for( i=1000000; i<10000000; i++)
-       swap(&num[i],&num[randint(i,1000000-1)]);
-    
-    for( i=1000000; i<10000000; i++)
+    for( i=0; i<1000000; i++)
+        num[i] = randint(1000000,9999999);
+         
+    for( i=0; i<1000000; i++)
         fprintf(rand_num_file,"%d\n",num[i]);
    
     return 0;
 }
 
-//实现randint(l,u)，返回[l,u]范围内的一个随机整数
+/*实现randint(l,u)，返回[l,u]范围内的一个随机整数
 int randint(int l,int u)
 {
     int temp;
     temp = floor(l + (1.0*rand()/RAND_MAX)*(u - l + 1 ));
     return temp;
+}*/
+/* 
+ * 生成大随机数（30位）
+ **/
+unsigned int bigrand()
+{
+    return rand()*RAND_MAX + rand();
+}
+
+/* 
+ * 生成[l,m]之间的随机数
+ **/
+unsigned int randint(int l, int u)
+{
+        return l + bigrand() % (u-l+1);
 }
 
 //交换
