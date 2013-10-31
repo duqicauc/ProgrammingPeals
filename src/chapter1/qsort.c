@@ -6,7 +6,7 @@ int intcomp(void *a,void *b)
     return *(int*)a - *(int*)b;
 }
 
-int num[100];
+int num[1000000];
 
 int main(int argc,char* argv[])
 {
@@ -16,8 +16,8 @@ int main(int argc,char* argv[])
     int n=0;
     while(fscanf(file,"%d",&num[n]) != EOF)
         n++;
-    qsort(num,100,sizeof(num[0]),(__compar_fn_t)intcomp);
-    for(i=0;i<100;i++)
+    qsort(num,1000000,sizeof(num[0]),(__compar_fn_t)intcomp);
+    for(i=0;i<1000000;i++)
         fprintf(result_file,"%d\n",num[i]);
     return 0;
 }
