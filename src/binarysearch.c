@@ -15,6 +15,7 @@ int binarysearch(DataType t)
 	u = n-1;
 	while(l <= u){
 		m = (l + u)/2;
+	/*printf(" %d %d %d\n", l, m, u);*/
 		if (x[m] < t)
 			l = m + 1;
 		else if (x[m] == t)
