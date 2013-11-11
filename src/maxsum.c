@@ -2,6 +2,8 @@
 /* maxsum.c---求一个向量的最大子向量                                                                     
 /************************************************************************/
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 //a或b如果未函数，则无效，因为宏仅做字符串替换
 #define maxmac(a, b) ((a) > (b) ? (a) : (b) )
@@ -12,8 +14,17 @@ float maxfun(float a, float b)
 }
 #define max(a, b) maxfun(a, b)
 
-#define MAXN 1000
+#define MAXN 100000
 float x[MAXN];
+int n;
+
+/* Fill x[n] with reals uniform on [-9,9]
+在-9和9之间的随机实数 */
+void sprinkle() 
+{   int i;
+    for (i = 0; i < n; i++)
+        x[i] = 9 - 18*( (float) rand()/RAND_MAX);
+}
 
 /* 算法3：O(nlogn)算法
 分治法，求向量的最大子向量 */
@@ -51,8 +62,8 @@ float maxsum(int l, int u)
 /* 算法4：O(n)算法*/
 float maxsum4(int l, int u)
 {
-	int maxendinghere=0;
-	int maxsofar=0;
+	float maxendinghere=0;
+	float maxsofar=0;
 	int i;
 	for (i = l; i<=u; i++) {
 		//maxendinghere是关键，在该语句执行之前保存x[0..i-1]的最大值，该语句执行之后保存x[0...i]的最大值
@@ -62,18 +73,30 @@ float maxsum4(int l, int u)
 	return maxsofar;
 }
 
+/************************************************************************/
+/* algum：
+/* 1---O(n3)算法
+/* 2---O(n2)算法
+/* 3---O(nlogn)算法
+/* 4---O(n)算法
+/************************************************************************/
 int main()
 {
-	/* 生成实验数据：大批量的随机数数组，给定数组元素值的范围 */
-	x[0] = 1;
-	x[1] = -2;
-	x[2] = 3;
-	x[3] = 10;
-	x[4] = -4;
-	x[5] = 7;
-	x[6] = 2;
-	x[7] = -5;
-	//printf("maxsub is: %.2f\n",maxsum(0,7));
-	printf("maxsub is: %.2f\n",maxsum4(0,7));
+	float maxnum;
+	int algum;
+	while (scanf("%d %d",&algum,&n) != EOF)
+	{
+		sprinkle();
+		switch(algum) {
+		case 3:
+			maxnum = maxsum(0,n-1);
+			break;
+		case 4:
+			maxnum = maxsum4(0,n-1);
+		default:
+			break;
+		}
+		printf("maxsub is: %f\n",maxnum);
+	}
 	return 0;
 }
