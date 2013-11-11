@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+float maxsum(int l, int u); 
+float maxsum4(int l,int u);
+
 //a或b如果未函数，则无效，因为宏仅做字符串替换
 #define maxmac(a, b) ((a) > (b) ? (a) : (b) )
 // 如果希望宏的参数能够是函数，那么要定义函数别名
@@ -56,7 +59,7 @@ float maxsum(int l, int u)
 	}
 	//递归调用
 	return max(lmax + rmax,
-		max(maxsum(l, m), maxsum(m+1, u)));
+		maxmac(maxsum(l, m), maxsum(m+1, u)));
 }
 
 /* 算法4：O(n)算法*/
