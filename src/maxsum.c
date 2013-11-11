@@ -18,12 +18,12 @@ float maxfun(float a, float b)
 float x[MAXN];
 int n;
 
-/* Fill x[n] with reals uniform on [-9,9]
-在-9和9之间的随机实数 */
-void sprinkle() 
+/* Fill x[n] with reals uniform on [-m,m]
+在-m和m之间的随机实数 */
+void sprinkle(int m) 
 {   int i;
     for (i = 0; i < n; i++)
-        x[i] = 9 - 18*( (float) rand()/RAND_MAX);
+        x[i] = m - 2*m*( (float) rand()/RAND_MAX);
 }
 
 /* 算法3：O(nlogn)算法
@@ -86,7 +86,7 @@ int main()
 	int algum,starttime,clicks;
 	while (scanf("%d %d",&algum,&n) != EOF)
 	{
-		sprinkle();
+		sprinkle(9);//生成[-9,9]之间的随机数填充x[n]数组
 		starttime = clock();
 		switch(algum) {
 		case 3:
