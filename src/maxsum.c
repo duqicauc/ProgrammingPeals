@@ -83,10 +83,11 @@ float maxsum4(int l, int u)
 int main()
 {
 	float maxnum;
-	int algum;
+	int algum,starttime,clicks;
 	while (scanf("%d %d",&algum,&n) != EOF)
 	{
 		sprinkle();
+		starttime = clock();
 		switch(algum) {
 		case 3:
 			maxnum = maxsum(0,n-1);
@@ -96,7 +97,8 @@ int main()
 		default:
 			break;
 		}
-		printf("maxsub is: %f\n",maxnum);
+		clicks = clock() - starttime;
+		printf("algum:%d\tn:%d\tmaxsub:%f\tclicks:%d\ttime:%f(s)\n",algum,n,maxnum,clicks,clicks/(float)CLOCKS_PER_SEC);
 	}
 	return 0;
 }
