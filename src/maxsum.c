@@ -5,7 +5,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-float maxsum(int l, int u); 
+float maxsum1();
+float maxsum2a();
+float maxsum2b();
+float maxsum3(int l, int u); 
 float maxsum4(int l,int u);
 
 //a或b如果未函数，则无效，因为宏仅做字符串替换
@@ -29,9 +32,64 @@ void sprinkle(int m)
         x[i] = m - 2*m*( (float) rand()/RAND_MAX);
 }
 
+/* 算法1：O(n3)算法*/
+float maxsum1()
+{   
+	int i, j, k;
+    float sum, maxsofar = 0;
+    for (i = 0; i < n; i++)
+        for (j = i; j < n; j++) {
+            sum = 0;
+            for (k = i; k <= j; k++)
+                sum += x[k];
+            maxsofar = maxmac(maxsofar,sum);
+		}
+    return maxsofar;
+}
+
+/* 算法2：O(n2)算法*/
+float maxsum2a()
+{
+	int i, j;
+    float sum, maxsofar = 0;
+    for (i = 0; i < n; i++) {
+        sum = 0;
+        for (j = i; j < n; j++) {
+            sum += x[j];
+            maxsofar = maxmac(maxsofar,sum);
+        }
+    }
+    return maxsofar;
+}
+
+/* 算法2：O(n2)算法，利用累加和*/
+float cumvec[MAXN+1]; //注意c语言如何让数组能否访问array[-1],使用指针
+
+float maxsum2b()
+{
+	int i, j;
+    float *cumarr, sum, maxsofar = 0;
+    cumarr = cumvec+1; /* to access cumarr[-1] */
+    cumarr[-1] = 0;
+	// cumarr[i]记录x[0...i]各个元素的累加和
+    for (i = 0; i < n; i++)
+        cumarr[i] = cumarr[i-1] + x[i];
+	
+    for (i = 0; i < n; i++) {
+        for (j = i; j < n; j++) {
+			// 所以x[i...j] = cumarr[j] - cumarr[i-1] 
+            sum = cumarr[j] - cumarr[i-1];
+            if (sum > maxsofar)
+                maxsofar = sum;
+        }
+    }
+    return maxsofar;
+}
+
+
 /* 算法3：O(nlogn)算法
 分治法，求向量的最大子向量 */
-float maxsum(int l, int u)
+float maxsum3(int l, int u)
 {
 	int i, m;
 	float sum, lmax, rmax;
@@ -57,9 +115,10 @@ float maxsum(int l, int u)
 		sum += x[i];
 		rmax = max(sum,rmax);
 	}
-	//递归调用
+	//递归调用,这里的max最好不要用宏maxmac，因为宏的直接替换特性
+	//会造成两次同一函数的递归调用，反而运行时间比O(n2)算法的长了
 	return max(lmax + rmax,
-		maxmac(maxsum(l, m), maxsum(m+1, u)));
+		max(maxsum3(l, m), maxsum3(m+1, u)));
 }
 
 /* 算法4：O(n)算法*/
@@ -79,7 +138,8 @@ float maxsum4(int l, int u)
 /************************************************************************/
 /* algum：
 /* 1---O(n3)算法
-/* 2---O(n2)算法
+/* 21---O(n2)算法a
+/* 22---O(n2)算法b
 /* 3---O(nlogn)算法
 /* 4---O(n)算法
 /************************************************************************/
@@ -92,8 +152,17 @@ int main()
 		sprinkle(9);//生成[-9,9]之间的随机数填充x[n]数组
 		starttime = clock();
 		switch(algum) {
+		case 1:
+			maxnum = maxsum1();
+			break;
+		case 21:
+			maxnum = maxsum2a();
+			break;
+		case 22:
+			maxnum = maxsum2b();
+			break;
 		case 3:
-			maxnum = maxsum(0,n-1);
+			maxnum = maxsum3(0,n-1);
 			break;
 		case 4:
 			maxnum = maxsum4(0,n-1);
