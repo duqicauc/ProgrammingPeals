@@ -8,15 +8,19 @@ using namespace std;
 #define MAXN 10000000
 int x[MAXN];
 
+/* 生成一个大随机数 */
 int bigrand()
 {
 	return RAND_MAX*rand() + rand();
 }
 
+/* 生成[l,u]之间的一个随机数 */
 int randint(int l, int u)
 {	return l + bigrand() % (u-l+1);
 }
 
+/*使用C++的STL库，这里的时间主要耗费每生成一个随机数，在
+将它放入结果集之前要检查是否已经存在*/
 void gensets(int m, int n)
 {
 	int start,end,clicks;
@@ -71,7 +75,6 @@ void genshuf(int m, int n)
 	int start,end,clicks;
 	start = clock();
 	int i, j;
-//	int *x = new int[n];
 	for (i = 0; i < n; i++)  
 		x[i] = i;
 	for (i = 0; i < m; i++) {
